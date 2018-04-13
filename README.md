@@ -1,6 +1,8 @@
 # gke-metrics
 Prometheus based metrics setup for Kubernetes on Google
 
+![sample dashboard](images/sample_dashboard.png)
+
 ## Requirements
 
 1. Running Kubernetes cluster
