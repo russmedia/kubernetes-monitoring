@@ -15,6 +15,10 @@ Prometheus based metrics setup for Kubernetes on Google
 export GCLOUD_USER=your_email_on_gcloud
 kubectl create clusterrolebinding "$GCLOUD_USER-cluster-admin-binding" --clusterrole=cluster-admin --user=$GCLOUD_USER
 ```
+
+**Please note!** If you have ```Legacy authorization	Enabled``` on your cluster master, the above rolebinding will not work. Instead add Kuberentes Cluster Admin privilage to your active account from **IAM & admin  -> [your user account] -> Kubernetes Cluster Admin.**
+Login again with ```gcloud auth login``` and initiate your cluster connection again (you have a **connect** button in the console right next to the cluster)
+
 2. Create monitoring namespace
 ```
 kubectl create ns monitoring
