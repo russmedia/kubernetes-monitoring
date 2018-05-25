@@ -27,6 +27,26 @@ spec:
           ports:
           - name: http
             containerPort: 3000
+          volumeMounts:
+          - name: grafana-storage
+            mountPath: /var/lib/grafana
+            readOnly: false
+      volumes:
+      - name: grafana-storage
+        persistentVolumeClaim:
+          claimName: grafana-pvc
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: grafana-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: standard
 ---
 apiVersion: v1
 kind: Service
