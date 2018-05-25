@@ -9,6 +9,10 @@ spec:
       labels:
         app: prometheus-server
     spec:
+      securityContext:
+        fsGroup: 2000
+          runAsUser: 1000
+          runAsNonRoot: true
       containers:
         - name: prometheus
           image: prom/prometheus:v2.1.0
@@ -22,14 +26,27 @@ spec:
               mountPath: /etc/prometheus/
             - name: prometheus-storage-volume
               mountPath: /prometheus/
+              readOnly: false
       volumes:
         - name: prometheus-config-volume
           configMap:
             defaultMode: 420
             name: prometheus-server-conf
-  
         - name: prometheus-storage-volume
-          emptyDir: {}
+          persistentVolumeClaim:
+            claimName: prometheus-pvc
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: prometheus-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: standard
 ---
 apiVersion: v1
 kind: Service
