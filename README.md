@@ -1,5 +1,7 @@
-# gke-metrics
-Prometheus based metrics setup for Kubernetes on Google
+# kubernetes-monitoring
+Prometheus based metrics setup for Kubernetes on Google.
+
+All clouds and platforms hosting Kubernetes can utilize this approach, but some details needs to be adjusted i.e. `PersistentVolumeClaim` part.
 
 ![sample dashboard](images/sample_dashboard.png)
 
