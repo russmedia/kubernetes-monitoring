@@ -1,0 +1,88 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: grafana
+  labels:
+    app: grafana
+    component: core
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: grafana
+    spec:
+      containers:
+        - image: grafana/grafana:5.0.4
+          name: grafana
+          # env:
+          resources:
+            # keep request = limit to keep this container in guaranteed class
+            limits:
+              cpu: 100m
+              memory: 100Mi
+            requests:
+              cpu: 100m
+              memory: 100Mi
+          ports:
+          - name: http
+            containerPort: 3000
+          volumeMounts:
+          - name: grafana-storage
+            mountPath: /var/lib/grafana
+            readOnly: false
+          - name: grafana-dashboards-conf
+            mountPath: /etc/grafana/provisioning/dashboards
+            readOnly: false
+          - name: grafana-datasources-conf
+            mountPath: /etc/grafana/provisioning/datasources
+            readOnly: false
+          - name: grafana-dashboards
+            mountPath: /var/lib/grafana/dashboards
+            readOnly: false
+      volumes:
+      - name: grafana-storage
+        persistentVolumeClaim:
+          claimName: grafana-pvc
+      - name: grafana-dashboards-conf
+        configMap:
+          defaultMode: 420
+          name: grafana-dashboards-conf
+      - name: grafana-datasources-conf
+        configMap:
+          defaultMode: 420
+          name: grafana-datasources-conf
+      - name: grafana-dashboards
+        configMap:
+          defaultMode: 420
+          name: grafana-dashboards
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: grafana-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: standard
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    kubernetes.io/name: monitoring-grafana
+  name: monitoring-grafana
+spec:
+  # In a production setup, we recommend accessing Grafana through an external Loadbalancer
+  # or through a public IP. 
+  type: LoadBalancer
+  ports:
+  - port: 80
+    targetPort: 3000
+  selector:
+    app: grafana
