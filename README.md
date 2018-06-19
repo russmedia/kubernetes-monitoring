@@ -43,20 +43,40 @@ kubectl apply -f prometheus.yml -n monitoring
 ```
 
 6. Create grafana for dashboard:
+
+- empty Grafana with persistent volume:
+
 ```
+cd grafana/empty
+kubectl apply -f grafana.yml -n monitoring
+```
+
+or 
+
+- preloaded Grafana with persistent volume (please consider kubectl apply message limit):
+
+```
+cd grafana/preloaded
+kubectl apply -f grafana-configmap.yml -n monitoring # configuration for Grafana
+kubectl apply -f grafana-dashboards.yml -n monitoring # dashboards for Grafana
 kubectl apply -f grafana.yml -n monitoring
 ```
 
 ## Dashboards
+
+Dashboards are loaded automatically from files in `grafana-dashboards.yml`.
+It is preferable approach to keep them in version controll repository, altough pvc is used for `/var/lib/grafana` path.
+
+## 1. Manual adding dashboard from grafana.org
 
 1. Get grafana url or ip:
 ```
 kubectl get svc -n monitoring | grep grafana
 ```
 
-2. Login with `admin/admin` to ip/url found in previous step.
+2. Login with `admin/admin`(or other credentials if defults were changed) to ip/url found in previous step.
 
-3. Add datasource:
+3. Add datasource( if not loaded automatically):
 type: prometheus
 url: http://prometheus-k8s:9090
 access: proxy
