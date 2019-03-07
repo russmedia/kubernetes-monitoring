@@ -4,6 +4,8 @@ metadata:
   name: prometheus-deployment
 spec:
   replicas: 1
+  strategy:
+    type: Recreate
   template:
     metadata:
       labels:
@@ -21,6 +23,14 @@ spec:
             - "--storage.tsdb.path=/prometheus/"
           ports:
             - containerPort: 9090
+          resources:
+            # keep request = limit to keep this container in guaranteed class
+            limits:
+              cpu: 1
+              memory: 3G
+            requests:
+              cpu: 0.5
+              memory: 512Mi
           volumeMounts:
             - name: prometheus-config-volume
               mountPath: /etc/prometheus/
@@ -45,7 +55,7 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 10Gi
+      storage: 50Gi
   storageClassName: standard
 ---
 apiVersion: v1
