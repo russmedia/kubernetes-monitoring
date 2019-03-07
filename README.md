@@ -67,8 +67,6 @@ access: proxy
 
 Note: if grafana is on public url/ip, change default password!
 
-
-
 ## 4. Authors
 
 - [Eryk Zalejski](https://github.com/ezalejski)
