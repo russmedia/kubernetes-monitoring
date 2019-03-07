@@ -3,12 +3,12 @@ Prometheus based metrics setup for Kubernetes on Google
 
 ![sample dashboard](images/sample_dashboard.png)
 
-## Requirements
+## 1. Requirements
 
 1. Running Kubernetes cluster
 2. `kubectl` configured to use it.
 
-## Setup
+## 2. Setup
 
 1. Create required binding (required only for Google Kubernetes engine):
 ```
@@ -45,7 +45,7 @@ kubectl apply -f prometheus.yml -n monitoring
 kubectl apply -f grafana.yml -n monitoring
 ```
 
-## Dashboards
+## 3. Dashboards
 
 1. Get grafana url or ip:
 ```
@@ -66,3 +66,15 @@ access: proxy
 - save
 
 Note: if grafana is on public url/ip, change default password!
+
+
+
+## 4. Authors
+
+- [Eryk Zalejski](https://github.com/ezalejski)
+
+- [Filip Haftek](https://github.com/filiphaftek)
+
+- [Ferencz Farkas](https://github.com/WhiteWolf99)
+
+- [Christoph Rosse](https://github.com/gries)
