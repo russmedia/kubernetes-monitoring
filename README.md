@@ -1,3 +1,5 @@
+> ## This Repo Is No Longer Maintained
+
 # gke-metrics
 Prometheus based metrics setup for Kubernetes on Google
 
